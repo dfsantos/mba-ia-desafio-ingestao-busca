@@ -13,6 +13,8 @@ Siga o passo a passo para fazer o setup e utilização do projeto.
 
 ### Setup
 
+> Requer Python 3.11.9 para compatibilidade com as versões das dependências fixadas no requirements.txt.
+
 1. Criar ambiente para o projeto
 
 python3 -m venv venv
