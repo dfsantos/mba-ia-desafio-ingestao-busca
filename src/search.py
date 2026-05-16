@@ -1,3 +1,7 @@
+from langchain.tools import tool
+from langchain_postgres.vectorstores import PGVector
+from langchain_openai import OpenAIEmbeddings
+
 PROMPT_TEMPLATE = """
 CONTEXTO:
 {contexto}
@@ -25,5 +29,14 @@ PERGUNTA DO USUÁRIO:
 RESPONDA A "PERGUNTA DO USUÁRIO"
 """
 
+vector_store = PGVector(
+    embeddings=OpenAIEmbeddings(model="text-embedding-3-small"),
+    collection_name="documentos",
+    connection="postgresql+psycopg://postgres:postgres@localhost:5432/rag",
+    use_jsonb=True
+)
+
 def search_prompt(question=None):
-    pass
+    """Busca informação para ajudar a gerar a resposta"""
+    docs = vector_store.similarity_search_with_score(question, k=10)
+    return "\n\n".join([doc[0].page_content for doc in docs])
