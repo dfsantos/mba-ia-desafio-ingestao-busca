@@ -8,14 +8,14 @@ from langchain_postgres.vectorstores import PGVector
 from langchain_openai import OpenAIEmbeddings
 
 PDF_PATH = os.getenv("PDF_PATH")
-file_path = "./document.pdf";
+file_path = f"{PDF_PATH}/document.pdf";
 loader = PyPDFLoader(file_path)
 text_spliter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=150)
 
 vector_store = PGVector(
-    embeddings=OpenAIEmbeddings(model="text-embedding-3-small"),
-    collection_name="documentos",
-    connection="postgresql+psycopg://postgres:postgres@localhost:5432/rag",
+    embeddings=OpenAIEmbeddings(model=os.getenv("OPENAI_EMBEDDING_MODEL")),
+    collection_name=os.getenv("PG_VECTOR_COLLECTION_NAME"),
+    connection=os.getenv("DATABASE_URL"),
     use_jsonb=True
 )
 

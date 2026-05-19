@@ -1,4 +1,5 @@
-from langchain.tools import tool
+import os
+
 from langchain_postgres.vectorstores import PGVector
 from langchain_openai import OpenAIEmbeddings
 
@@ -30,9 +31,9 @@ RESPONDA A "PERGUNTA DO USUÁRIO"
 """
 
 vector_store = PGVector(
-    embeddings=OpenAIEmbeddings(model="text-embedding-3-small"),
-    collection_name="documentos",
-    connection="postgresql+psycopg://postgres:postgres@localhost:5432/rag",
+    embeddings=OpenAIEmbeddings(model=os.getenv("OPENAI_EMBEDDING_MODEL")),
+    collection_name=os.getenv("PG_VECTOR_COLLECTION_NAME"),
+    connection=os.getenv("DATABASE_URL"),
     use_jsonb=True
 )
 
